@@ -15,23 +15,16 @@ const title = "Restaurant";
 
 const Header = ()=>{
 
-    const [isLoggedin,setisLoggedin] = useState(false);
-
     return (
     <div className="sticky top-0 flex justify-between z-50 bg-pink-50 shadow-lg sm:bg-blue-50 md:bg-yellow-50" >
     <Title/>
     <h1 className="py-10">{title}</h1>
     <div className="nav-item">
         <ul className="flex py-10">
-        <li className="px-2 "><Link href="/usygd">Home</Link></li>
+        <li className="px-2 "><Link href="/home">Home</Link></li>
         <li className="px-2 "> <Link href="/profile">Profile</Link></li>
         </ul>
     </div>
-        {
-            isLoggedin ? (<button onClick={()=>setisLoggedin(false)}>logout</button>) 
-            : (<button onClick={()=>setisLoggedin(true)}>login</button>)
-        } 
-
     </div>
     ); 
 };
