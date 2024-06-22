@@ -1,21 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
-import dbConfig from '@/dbConfig/dbConfig';
-import Restaurant from '@/models/restaurantModel';
+import { NextRequest, NextResponse } from "next/server";
+import dbConfig from "@/dbConfig/dbConfig";
+import Restaurant from "@/models/restaurantModel";
 
 dbConfig();
 
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const {
+    const { name, address, contactInfo, description } = reqBody;
+
+    const newRestaurant = new Restaurant({
       name,
       address,
       contactInfo,
       description,
-    } = reqBody;
-
-    const newRestaurant = new Restaurant({ name, address, contactInfo, description });
-    console.log({ newRestaurant });
+    });
 
     const savedRestaurant = await newRestaurant.save();
 
@@ -25,3 +24,40 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function PUT(request: NextRequest) {
+  try {
+    const reqBody = await request.json();
+    const { _id, name, address, contactInfo, description } = reqBody;
+
+    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
+      _id,
+      {
+        name,
+        address,
+        contactInfo,
+        description,
+      },
+      { new: true }
+    );
+
+    if (!updatedRestaurant) {
+      return NextResponse.json(
+        { error: "Restaurant not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(updatedRestaurant, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const restaurants = await Restaurant.find();
+    return NextResponse.json(restaurants, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

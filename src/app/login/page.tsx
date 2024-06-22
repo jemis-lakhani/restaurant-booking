@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { loginSchema } from "@/helpers/validationSchema";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 type FormValues = {
@@ -59,7 +58,11 @@ const Login: React.FC = () => {
               {...register("email")}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div className="flex flex-col">
             <label htmlFor="password" className="mb-1 text-sm font-medium">
@@ -71,7 +74,11 @@ const Login: React.FC = () => {
               {...register("password")}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <button
             type="submit"

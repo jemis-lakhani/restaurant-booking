@@ -3,10 +3,8 @@ import Link from "next/link";
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { signupSchema } from "@/helpers/validationSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -54,7 +52,11 @@ const Signup: React.FC = () => {
               {...register("username")}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username.message}</p>}
+            {errors.username && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.username.message}
+              </p>
+            )}
           </div>
           <div className="flex flex-col">
             <label htmlFor="email" className="mb-1 text-sm font-medium">
@@ -66,7 +68,11 @@ const Signup: React.FC = () => {
               {...register("email")}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div className="flex flex-col">
             <label htmlFor="password" className="mb-1 text-sm font-medium">
@@ -78,7 +84,11 @@ const Signup: React.FC = () => {
               {...register("password")}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <div className="flex flex-col">
             <label htmlFor="role" className="mb-1 text-sm font-medium">
