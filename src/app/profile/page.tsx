@@ -27,14 +27,13 @@ function Profile() {
       localStorage.removeItem("role");
       router.push("/login");
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
       toast.error(error.message);
     }
   };
 
   const getUserDetails = async () => {
     const res = await axios.get("/api/users/me");
-    console.log(res.data);
     setData(res.data.data);
   };
 

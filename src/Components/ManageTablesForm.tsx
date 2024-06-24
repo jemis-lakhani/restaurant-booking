@@ -41,7 +41,6 @@ const ManageTablesForm: React.FC = () => {
       let response;
       response = await axios.post(`/api/users/tables`, data);
       toast.success("Table added successfully");
-      console.log("Response:", response.data);
       reset();
       setTables((prev) => [...prev, response.data]);
     } catch (error: any) {

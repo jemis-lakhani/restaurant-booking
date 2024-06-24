@@ -4,8 +4,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import RestaurantCard from "@/Components/RestaurantCard";
-import TableCard from "@/Components/TableCard";
+import RestaurantCard from "@/components/RestaurantCard";
+import TableCard from "@/components/TableCard";
 
 type Restaurant = {
   _id: string;
@@ -84,7 +84,7 @@ function HomePage() {
       localStorage.removeItem("role");
       router.push("/login");
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
       toast.error(error.message);
     }
   };
@@ -129,7 +129,7 @@ function HomePage() {
         <div className="mt-4">
           <h2>Welcome, Admin!</h2>
           <p>Content for admins...</p>
-          <Link href="/admin">Go to Admin Dashboard</Link>
+          <Link className="text-purple-600" href="/admin">Go to Admin Dashboard</Link>
         </div>
       )}
     </div>

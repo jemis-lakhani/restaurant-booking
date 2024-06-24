@@ -28,11 +28,9 @@ const Signup: React.FC = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       const response = await axios.post("/api/users/signup", data);
-      console.log("signup success", response.data);
       toast.success("Signup Success");
       router.push("/login");
     } catch (error: any) {
-      console.log("signup failed", error.message);
       toast.error(error.message);
     }
   };

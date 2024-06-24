@@ -9,9 +9,17 @@ type FormValues = {
   contactInfo: string;
   description: string;
 };
+type Restaurant = {
+  _id: string;
+  name: string;
+  address: string;
+  contactInfo: string;
+  description: string;
+  ownerId: string;
+};
 
 type AddRestaurantFormProps = {
-  onSubmit: (data: FormValues) => void;
+  onSubmit: (data: Restaurant) => void;
 };
 
 const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({ onSubmit }) => {
@@ -25,16 +33,13 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({ onSubmit }) => {
   const handleFormSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       let response;
-
       response = await axios.post(`/api/users/restaurants`, data);
       toast.success("Restaurant added successfully");
-
-      console.log("Response:", response.data);
       onSubmit(response.data);
       reset();
     } catch (error: any) {
-      console.error("Error adding/updating restaurant:", error.message);
-      toast.error("Failed to add/update restaurant");
+      console.error("Error adding restaurant:", error.message);
+      toast.error("Failed to add restaurant");
     }
   };
 

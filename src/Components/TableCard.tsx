@@ -17,7 +17,6 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
       <p>Capacity: {table.capacity}</p>
       <p>Start Time: {new Date(table.startTime).toLocaleString()}</p>
       <p>End Time: {new Date(table.endTime).toLocaleString()}</p>
-      <p>Restaurant ID: {table.restaurantId}</p>
     </div>
   );
 };

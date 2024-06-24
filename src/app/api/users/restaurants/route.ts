@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConfig from "@/dbConfig/dbConfig";
 import Restaurant from "@/models/restaurantModel";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 dbConfig();
 
 export async function POST(request: NextRequest) {
   try {
+    const userId = await getDataFromToken(request);
     const reqBody = await request.json();
     const { name, address, contactInfo, description } = reqBody;
 
@@ -14,10 +16,10 @@ export async function POST(request: NextRequest) {
       address,
       contactInfo,
       description,
+      ownerId: userId,
     });
 
     const savedRestaurant = await newRestaurant.save();
-
     return NextResponse.json(savedRestaurant, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -55,7 +57,16 @@ export async function PUT(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const restaurants = await Restaurant.find();
+    const role = request.headers.get("x-role") || "";
+    const userId = await getDataFromToken(request);
+
+    let restaurants;
+    if (role === "restaurantOwner") {
+      restaurants = await Restaurant.find({ ownerId: userId });
+    } else {
+      restaurants = await Restaurant.find();
+    }
+
     return NextResponse.json(restaurants, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

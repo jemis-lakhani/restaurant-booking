@@ -26,19 +26,10 @@ const Login: React.FC = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       const response = await axios.post("/api/users/login", data);
-      console.log("login success", response.data);
       toast.success("Login Success");
       localStorage.setItem("role", response.data.role);
-
-      if (response.data.role === "admin") {
-        router.push("/");
-      } else if (response.data.role === "restaurantOwner") {
-        router.push("/");
-      } else {
-        router.push("/");
-      }
+      router.push("/");
     } catch (error: any) {
-      console.log("login failed", error.message);
       toast.error(error.message);
     }
   };
