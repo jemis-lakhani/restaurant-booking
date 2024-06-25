@@ -24,6 +24,12 @@ type Table = {
   restaurantId: string;
 };
 
+type Booking = {
+  startTime: string;
+  endTime: string;
+  userId: string;
+};
+
 function HomePage() {
   const [role, setRole] = useState<string | null>(null);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -112,7 +118,7 @@ function HomePage() {
             </div>
           ))}
           {tables.map((table) => (
-            <TableCard key={table.tableNumber} table={table} />
+            <TableCard key={table._id} table={table} />
           ))}
         </div>
       )}

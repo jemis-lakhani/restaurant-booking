@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import AddRestaurantForm from "../../components/AddRestaurantForm";
+import AddRestaurantForm from "@/components/AddRestaurantForm";
 import ManageTablesForm from "@/components/ManageTablesForm";
 
 type Restaurant = {
