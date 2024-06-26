@@ -49,10 +49,6 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    setRole(localStorage.getItem("role"));
-  }, []);
-
-  useEffect(() => {
     const fetchRestaurants = async () => {
       try {
         const response = await axios.get("/api/users/restaurants");
@@ -107,19 +103,25 @@ function HomePage() {
         </button>
       </div>
       {role === "user" && (
-        <div className="grid grid-cols-2 gap-16 px-28 md:grid-cols-3 lg:grid-cols-4 ">
-          {restaurants.map((restaurant) => (
-            <div
-              key={restaurant._id}
-              className="block cursor-pointer"
-              onClick={() => handleRestaurantClick(restaurant._id)}
-            >
-              <RestaurantCard key={restaurant._id} restaurant={restaurant} />
+        <div className="container mx-auto px-4 sm:px-8">
+          <div className="py-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-16 px-16">
+              {restaurants.map((restaurant) => (
+                <div
+                  key={restaurant._id}
+                  className="cursor-pointer transform hover:scale-105 transition-transform duration-300"
+                  onClick={() => handleRestaurantClick(restaurant._id)}
+                >
+                  <RestaurantCard restaurant={restaurant} />
+                </div>
+              ))}
+              {tables.map((table) => (
+                <div key={table._id} className="cursor-pointer transform hover:scale-105 transition-transform duration-300">
+                  <TableCard table={table} />
+                </div>
+              ))}
             </div>
-          ))}
-          {tables.map((table) => (
-            <TableCard key={table._id} table={table} />
-          ))}
+          </div>
         </div>
       )}
       {role === "restaurantOwner" && (

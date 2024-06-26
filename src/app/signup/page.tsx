@@ -61,7 +61,7 @@ const Signup: React.FC = () => {
               Email
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
               {...register("email")}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
