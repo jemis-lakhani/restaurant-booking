@@ -7,7 +7,9 @@ const Admin = () => {
     <div className="flex flex-col justify-center items-center min-h-screen py-2">
       <h1>Admin Dashboard</h1>
       <div className="mt-4">
-        <Link className="text-purple-600" href="/profile">Go to Profile</Link>
+        <Link className="text-purple-600" href="/profile">
+          Go to Profile
+        </Link>
       </div>
     </div>
   );

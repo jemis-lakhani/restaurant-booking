@@ -19,12 +19,17 @@ export async function POST(request: NextRequest) {
 
     table.bookings = table.bookings || [];
 
-    const overlappingBooking = table.bookings.some((booking:any) =>
-      (new Date(startTime) < new Date(booking.endTime)) && (new Date(endTime) > new Date(booking.startTime))
+    const overlappingBooking = table.bookings.some(
+      (booking: any) =>
+        new Date(startTime) < new Date(booking.endTime) &&
+        new Date(endTime) > new Date(booking.startTime)
     );
 
     if (overlappingBooking) {
-      return NextResponse.json({ error: "Time slot is already booked" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Time slot is already booked" },
+        { status: 400 }
+      );
     }
 
     table.bookings.push({ startTime, endTime, userId });

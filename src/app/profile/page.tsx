@@ -11,19 +11,31 @@ type UserData = {
   email: string;
 };
 
-function Profile() {
+const Profile = () => {
   const router = useRouter();
   const [data, setData] = useState<UserData | null>(null);
   const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
+    const getUserDetails = async () => {
+      try {
+        const res = await axios.get("/api/users/me");
+        setData(res.data.data);
+      } catch (error) {
+        toast.error("Failed to fetch user details");
+        console.error(error);
+      }
+    };
+
+    getUserDetails();
+
     setRole(localStorage.getItem("role"));
   }, []);
 
   const logout = async () => {
     try {
       await axios.get("/api/users/logout");
-      toast.success("logout successfully");
+      toast.success("Logged out successfully");
       localStorage.removeItem("role");
       router.push("/login");
     } catch (error: any) {
@@ -32,14 +44,9 @@ function Profile() {
     }
   };
 
-  const getUserDetails = async () => {
-    const res = await axios.get("/api/users/me");
-    setData(res.data.data);
-  };
-
   return (
-    <div className="flex flex-col items-center min-h-screen py-2">
-      <div className="flex justify-between w-full px-36">
+    <div className="flex flex-col items-center min-h-screen">
+      <div className="flex justify-between w-full p-4">
         <h1 className="text-2xl font-semibold mt-4">Profile Page</h1>
         <button
           onClick={logout}
@@ -49,33 +56,29 @@ function Profile() {
         </button>
       </div>
 
-      <button
-        onClick={getUserDetails}
-        className="text-white rounded bg-purple-600 mt-2 p-1"
-      >
-        My Details
-      </button>
-
-      <h2 className="p-1 mt-2  bg-black text-white">
-        {data === null ? (
-          "Nothing"
+      <div className="p-4 bg-gray-100 rounded-lg mt-4 shadow-md">
+        {data ? (
+          <>
+            <Link href={`/profile/${data._id}`}>
+              <p className="text-xl font-semibold">Welcome, {data.username}!</p>
+              <p className="text-lg text-gray-600">{data.email}</p>
+              <p className="text-sm text-gray-500">Role: {role}</p>
+            </Link>
+          </>
         ) : (
-          <Link href={`/profile/${data._id}`}>
-            Username : {data.username}
-            <br />
-            Email : {data.email}
-            <br />
-            Role: {role}
-          </Link>
+          <p>Loading user details...</p>
         )}
-      </h2>
+      </div>
+
       {role === "admin" && (
         <div className="mt-4">
-          <Link href="/admin">Go to Admin Dashboard</Link>
+          <Link href="/admin" className="text-blue-500 underline">
+            Go to Admin Dashboard
+          </Link>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default Profile;
