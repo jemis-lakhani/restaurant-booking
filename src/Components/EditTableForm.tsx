@@ -13,7 +13,10 @@ type EditTableFormProps = {
   onTableUpdated: (updatedTable: Table) => void;
 };
 
-const EditTableForm: React.FC<EditTableFormProps> = ({ table, onTableUpdated }) => {
+const EditTableForm: React.FC<EditTableFormProps> = ({
+  table,
+  onTableUpdated,
+}) => {
   const [tableNumber, setTableNumber] = useState(table.tableNumber);
   const [capacity, setCapacity] = useState(table.capacity);
 

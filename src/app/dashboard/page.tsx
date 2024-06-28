@@ -140,7 +140,6 @@ const Dashboard: React.FC = () => {
                   <button
                     onClick={() => handleRestaurantClick(restaurant._id)}
                     className="text-white rounded bg-green-700 mt-2 p-2"
-                    
                   >
                     {selectedRestaurantId === restaurant._id && showTables
                       ? "Hide Tables"
@@ -171,7 +170,7 @@ const Dashboard: React.FC = () => {
           </div>
         )}
 
-<div className="mt-8 ml-4">
+        <div className="mt-8 ml-4">
           {showTables && selectedRestaurantId && (
             <ManageTablesForm
               restaurantId={selectedRestaurantId}

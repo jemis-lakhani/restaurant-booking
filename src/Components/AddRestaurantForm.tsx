@@ -71,13 +71,15 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
       <h2 className="text-xl font-semibold mb-4">
         {restaurant ? "Update Restaurant" : "Add Restaurant"}
       </h2>
-       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         <InputField
           id="name"
           label="Restaurant Name"
           placeholder="Enter restaurant name"
           error={errors.name?.message}
-          register={register("name", { required: "Restaurant Name is required" })}
+          register={register("name", {
+            required: "Restaurant Name is required",
+          })}
         />
         <InputField
           id="address"
@@ -91,7 +93,9 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
           label="Contact Information"
           placeholder="Enter contact information"
           error={errors.contactInfo?.message}
-          register={register("contactInfo", { required: "Contact Information is required" })}
+          register={register("contactInfo", {
+            required: "Contact Information is required",
+          })}
         />
         <div>
           <label
@@ -102,7 +106,9 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
           </label>
           <textarea
             id="description"
-            {...register("description", { required: "Description is required" })}
+            {...register("description", {
+              required: "Description is required",
+            })}
             className="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
             placeholder="Enter description"
           />

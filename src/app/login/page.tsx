@@ -29,8 +29,9 @@ const Login: React.FC = () => {
       toast.success("Login Success");
       localStorage.setItem("role", response.data.role);
       router.push("/");
-    }  catch (error: any) {
-      const errorMessage = error.response?.data?.error  || "Login failed. Please try again.";
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.error || "Login failed. Please try again.";
       toast.error(errorMessage);
     }
   };

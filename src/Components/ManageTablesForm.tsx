@@ -15,8 +15,10 @@ type ManageTablesFormProps = {
   restaurantId: string;
   onTableAdded: () => void;
 };
-const ManageTablesForm: React.FC<ManageTablesFormProps> = ({ restaurantId ,onTableAdded}) => {
-  const [tables, setTables] = useState<Table[]>([]);
+const ManageTablesForm: React.FC<ManageTablesFormProps> = ({
+  restaurantId,
+  onTableAdded,
+}) => {
   const {
     register,
     handleSubmit,
@@ -30,10 +32,13 @@ const ManageTablesForm: React.FC<ManageTablesFormProps> = ({ restaurantId ,onTab
   const onSubmit: SubmitHandler<Table> = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post(`/api/users/tables`, { ...data, restaurantId });
+      const response = await axios.post(`/api/users/tables`, {
+        ...data,
+        restaurantId,
+      });
       toast.success("Table added successfully");
       reset();
-      onTableAdded(); // Trigger reload of tables after adding a new one
+      onTableAdded();
     } catch (error: any) {
       console.error("Error adding/updating table:", error.message);
       toast.error("Failed to add/update table");
@@ -41,7 +46,6 @@ const ManageTablesForm: React.FC<ManageTablesFormProps> = ({ restaurantId ,onTab
       setLoading(false);
     }
   };
-
 
   return (
     <div className="max-w-fit bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -118,6 +122,5 @@ const ManageTablesForm: React.FC<ManageTablesFormProps> = ({ restaurantId ,onTab
     </div>
   );
 };
-
 
 export default ManageTablesForm;
