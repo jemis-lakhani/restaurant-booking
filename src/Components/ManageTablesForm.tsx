@@ -11,8 +11,11 @@ type Table = {
   endTime: string;
   restaurantId: string;
 };
-
-const ManageTablesForm: React.FC = () => {
+type ManageTablesFormProps = {
+  restaurantId: string;
+  onTableAdded: () => void;
+};
+const ManageTablesForm: React.FC<ManageTablesFormProps> = ({ restaurantId ,onTableAdded}) => {
   const [tables, setTables] = useState<Table[]>([]);
   const {
     register,
@@ -22,52 +25,28 @@ const ManageTablesForm: React.FC = () => {
     formState: { errors },
   } = useForm<Table>();
 
-  useEffect(() => {
-    const fetchTables = async () => {
-      try {
-        const response = await axios.get("/api/users/tables");
-        setTables(response.data);
-      } catch (error: any) {
-        console.error("Error fetching tables:", error.message);
-        toast.error("Failed to fetch tables");
-      }
-    };
-
-    fetchTables();
-  }, []);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<Table> = async (data) => {
+    setLoading(true);
     try {
-      let response;
-      response = await axios.post(`/api/users/tables`, data);
+      const response = await axios.post(`/api/users/tables`, { ...data, restaurantId });
       toast.success("Table added successfully");
       reset();
-      setTables((prev) => [...prev, response.data]);
+      onTableAdded(); // Trigger reload of tables after adding a new one
     } catch (error: any) {
       console.error("Error adding/updating table:", error.message);
       toast.error("Failed to add/update table");
+    } finally {
+      setLoading(false);
     }
   };
 
+
   return (
-    <div className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <h2 className="text-xl font-semibold mb-4">Manage Tables</h2>
+    <div className="max-w-fit bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <h2 className="text-xl font-semibold mb-4">Add Tables</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label htmlFor="restaurantId" className="block text-gray-700 mb-1">
-            Restaurant ID
-          </label>
-          <input
-            type="text"
-            id="restaurantId"
-            {...register("restaurantId", { required: true })}
-            className="input-field"
-            placeholder="Enter restaurant ID"
-          />
-          {errors.restaurantId && (
-            <p className="text-red-500">Restaurant ID is required</p>
-          )}
-        </div>
         <div>
           <label htmlFor="tableNumber" className="block text-gray-700 mb-1">
             Table Number
@@ -128,13 +107,17 @@ const ManageTablesForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-blue-600"
+          className={`bg-blue-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-blue-600 ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={loading}
         >
-          Add Table
+          {loading ? "Adding Table..." : "Add Table"}
         </button>
       </form>
     </div>
   );
 };
+
 
 export default ManageTablesForm;

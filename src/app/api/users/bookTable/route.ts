@@ -40,3 +40,30 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function GET(request: NextRequest) {
+  try {
+    const userId = getDataFromToken(request);
+    const role = localStorage.getItem("role");
+    if (role !== "user") {
+      return NextResponse.json([], { status: 200 });
+    }
+
+    const tables = await Table.find({ "bookings.userId": userId });
+
+    if (!tables) {
+      return NextResponse.json({ error: "No tables found" }, { status: 404 });
+    }
+
+    const userTables = tables.map((table) => {
+      return {
+        ...table.toObject(),
+        bookings: table.bookings.filter((booking: any) => booking.userId === userId),
+      };
+    });
+
+    return NextResponse.json(userTables, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

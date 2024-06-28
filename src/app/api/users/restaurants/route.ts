@@ -11,6 +11,14 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { name, address, contactInfo, description } = reqBody;
 
+    const existingRestaurant = await Restaurant.findOne({ ownerId: userId });
+    if (existingRestaurant) {
+      return NextResponse.json(
+        { error: "Owner already has a restaurant" },
+        { status: 400 }
+      );
+    }
+
     const newRestaurant = new Restaurant({
       name,
       address,
@@ -28,33 +36,29 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    const userId = await getDataFromToken(request);
     const reqBody = await request.json();
     const { _id, name, address, contactInfo, description } = reqBody;
 
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
-      _id,
-      {
-        name,
-        address,
-        contactInfo,
-        description,
-      },
-      { new: true }
-    );
-
-    if (!updatedRestaurant) {
-      return NextResponse.json(
-        { error: "Restaurant not found" },
-        { status: 404 }
-      );
+     const restaurant = await Restaurant.findById(_id);
+    if (!restaurant) {
+      return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
+    }
+    if (restaurant.ownerId.toString() !== userId) {
+      return NextResponse.json({ error: "Not authorized" }, { status: 403 });
     }
 
+    restaurant.name = name;
+    restaurant.address = address;
+    restaurant.contactInfo = contactInfo;
+    restaurant.description = description;
+
+    const updatedRestaurant = await restaurant.save();
     return NextResponse.json(updatedRestaurant, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-
 export async function GET(request: NextRequest) {
   try {
     const role = request.headers.get("x-role") || "";

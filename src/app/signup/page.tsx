@@ -30,8 +30,9 @@ const Signup: React.FC = () => {
       const response = await axios.post("/api/users/signup", data);
       toast.success("Signup Success");
       router.push("/login");
-    } catch (error: any) {
-      toast.error(error.message);
+    }  catch (error: any) {
+      const errorMessage = error.response?.data?.error  || "Signup failed. Please try again.";
+      toast.error(errorMessage);
     }
   };
 
@@ -42,7 +43,7 @@ const Signup: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex flex-col">
             <label htmlFor="username" className="mb-1 text-sm font-medium">
-              Username
+            Full Name
             </label>
             <input
               type="text"

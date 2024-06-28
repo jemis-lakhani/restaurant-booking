@@ -11,9 +11,17 @@ type UserData = {
   email: string;
 };
 
+type TableBooking = {
+  tableId: string;
+  restaurantId: string;
+  startTime: string;
+  endTime: string;
+};
+
 const Profile = () => {
   const router = useRouter();
   const [data, setData] = useState<UserData | null>(null);
+  const [bookings, setBookings] = useState<TableBooking[]>([]);
   const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,7 +35,18 @@ const Profile = () => {
       }
     };
 
+    const getUserBookings = async () => {
+      try {
+        const res = await axios.get("/api/users/tables");
+        setBookings(res.data);
+      } catch (error) {
+        toast.error("Failed to fetch table bookings");
+        console.error(error);
+      }
+    };
+
     getUserDetails();
+    getUserBookings();
 
     setRole(localStorage.getItem("role"));
   }, []);
@@ -62,14 +81,33 @@ const Profile = () => {
             <Link href={`/profile/${data._id}`}>
               <p className="text-xl font-semibold">Welcome, {data.username}!</p>
               <p className="text-lg text-gray-600">{data.email}</p>
-              <p className="text-sm text-gray-500">Role: {role}</p>
             </Link>
           </>
         ) : (
           <p>Loading user details...</p>
         )}
       </div>
-
+      {role === "user" && (
+        <div className="mt-8 w-full max-w-4xl">
+          <h2 className="text-xl font-semibold mb-4">Your Table Bookings</h2>
+          {bookings.length > 0 ? (
+            bookings.map((booking) => (
+              <div
+                key={booking.tableId}
+                className="mb-4 p-4 bg-white shadow rounded-lg"
+              >
+                <p className="text-lg font-semibold">
+                  Restaurant: {booking.restaurantId}
+                </p>
+                <p>From: {new Date(booking.startTime).toLocaleString()}</p>
+                <p>To: {new Date(booking.endTime).toLocaleString()}</p>
+              </div>
+            ))
+          ) : (
+            <p>No table bookings found.</p>
+          )}
+        </div>
+      )}
       {role === "admin" && (
         <div className="mt-4">
           <Link href="/admin" className="text-blue-500 underline">
