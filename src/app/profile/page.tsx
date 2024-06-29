@@ -99,8 +99,7 @@ const Profile = () => {
                 <p className="text-lg font-semibold">
                   Restaurant: {booking.restaurantId}
                 </p>
-                <p>From: {new Date(booking.startTime).toLocaleString()}</p>
-                <p>To: {new Date(booking.endTime).toLocaleString()}</p>
+                <p>startTime: {new Date(booking.startTime).toLocaleString()} - endTime: {new Date(booking.endTime).toLocaleString()}</p>
               </div>
             ))
           ) : (

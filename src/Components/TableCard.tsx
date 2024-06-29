@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -23,10 +23,25 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
   const [booked, setBooked] = useState(false);
   const [error, setError] = useState("");
   const [showBookings, setShowBookings] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    if (userRole) {
+      setRole(userRole);
+    } else {
+      console.error("Role not found in local storage");
+    }
+  }, []);
 
   const bookTable = async () => {
     if (!startTime || !endTime) {
       setError("*Please select both start and end times.");
+      return;
+    }
+
+    if (new Date(startTime) >= new Date(endTime)) {
+      setError("*Start time must be before end time.");
       return;
     }
 
@@ -84,12 +99,15 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
         </div>
       )}
 
-      <button
-        onClick={() => setShowBookings(!showBookings)}
-        className=" text-blue-800 rounded-md ml-1 mt-2 hover:text-blue-600 hover:underline transition-colors duration-300"
-      >
-        {showBookings ? "Hide Booked Slots" : "See Booked Slot List"}
-      </button>
+      {role === "restaurantOwner" && (
+        <button
+          onClick={() => setShowBookings(!showBookings)}
+          className=" text-blue-800 rounded-md ml-1 mt-2 hover:text-blue-600 hover:underline transition-colors duration-300"
+        >
+          {showBookings ? "Hide Booked Slots" : "See Booked Slot List"}
+        </button>
+      )}
+
       {showBookings && (
         <div className="mt-4">
           <h4 className="font-bold mb-2">Booked Slots:</h4>
