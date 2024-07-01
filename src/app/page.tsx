@@ -12,6 +12,8 @@ type Restaurant = {
   address: string;
   contactInfo: string;
   description: string;
+  openTime: string;
+  closeTime: string;
 };
 
 type UserData = {
@@ -50,19 +52,21 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        const response = await axios.get("/api/users/restaurants");
-        setRestaurants(response.data);
-        setFilteredRestaurants(response.data);
-      } catch (error: any) {
-        console.error("Error fetching restaurants:", error.message);
-        toast.error("Failed to fetch restaurants");
-      }
-    };
+    if (role === "user") {
+      const fetchRestaurants = async () => {
+        try {
+          const response = await axios.get("/api/users/restaurants");
+          setRestaurants(response.data);
+          setFilteredRestaurants(response.data);
+        } catch (error: any) {
+          console.error("Error fetching restaurants:", error.message);
+          toast.error("Failed to fetch restaurants");
+        }
+      };
 
-    fetchRestaurants();
-  }, []);
+      fetchRestaurants();
+    }
+  }, [role]);
 
   const handleRestaurantClick = (restaurantId: string) => {
     router.push(`/tablebook/${restaurantId}`);

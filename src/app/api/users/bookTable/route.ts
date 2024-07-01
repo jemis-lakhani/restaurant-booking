@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConfig from "@/dbConfig/dbConfig";
 import Table from "@/models/tableModel";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
+import User from "@/models/userModel";
 
 dbConfig();
 
@@ -12,6 +13,7 @@ export async function POST(request: NextRequest) {
     const { tableId, startTime, endTime } = reqBody;
 
     const table = await Table.findById(tableId);
+    const user = await User.findById(userId);
 
     if (!table) {
       return NextResponse.json({ error: "Table not found" }, { status: 404 });
@@ -32,7 +34,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    table.bookings.push({ startTime, endTime, userId });
+    table.bookings.push({ startTime, endTime, userId,username: user.username, email: user.email, });
     await table.save();
 
     return NextResponse.json(table, { status: 200 });

@@ -40,8 +40,8 @@ const ManageTablesForm: React.FC<ManageTablesFormProps> = ({
       reset();
       onTableAdded();
     } catch (error: any) {
-      console.error("Error adding/updating table:", error.message);
-      toast.error("Failed to add/update table");
+      console.error("Error adding table:", error.message);
+      toast.error(error.response?.data?.error);
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ const ManageTablesForm: React.FC<ManageTablesFormProps> = ({
             <p className="text-red-500">Capacity is required</p>
           )}
         </div>
-        <div>
+        {/* <div>
           <label htmlFor="startTime" className="block text-gray-700 mb-1">
             Start Time
           </label>
@@ -108,7 +108,7 @@ const ManageTablesForm: React.FC<ManageTablesFormProps> = ({
           {errors.endTime && (
             <p className="text-red-500">{errors.endTime.message}</p>
           )}
-        </div>
+        </div> */}
         <button
           type="submit"
           className={`bg-blue-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-blue-600 ${

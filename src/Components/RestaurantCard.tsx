@@ -7,6 +7,8 @@ type Restaurant = {
   address: string;
   contactInfo: string;
   description: string;
+  openTime: string;
+  closeTime: string;
 };
 
 type Props = {
@@ -35,7 +37,7 @@ const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
         <p className="text-gray-700 text-lg">
           <strong>Contact:</strong> {restaurant.contactInfo}
         </p>
-        <p className="text-gray-700 text-lg mt-2">{restaurant.description}</p>
+        <p className="text-gray-700 text-lg mt-2">{restaurant.description} openTime:{restaurant.openTime} closeTime:{restaurant.closeTime}</p>
       </div>
     </div>
   );

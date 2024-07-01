@@ -15,6 +15,8 @@ type Booking = {
   startTime: string;
   endTime: string;
   userId: string;
+  username: string;
+  email: string;
 };
 
 const TableCard: React.FC<TableProps> = ({ table }) => {
@@ -46,25 +48,42 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
     }
 
     try {
+      const userDetails = await axios.get("/api/users/me");
+      const { username, email } = userDetails.data.data;
+
       await axios.post("/api/users/bookTable", {
         tableId: table._id,
         startTime,
         endTime,
-      });
+        username,
+        email,
+      }); 
       toast.success("Table booked successfully");
       setBooked(true);
       setError("");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error: any) {
       console.error("Error booking table:", error.message);
       toast.error("The slot is already booked.");
     }
   };
 
+  const getFilteredBookings = () => {
+    const currentTime = new Date();
+    return (
+      table.bookings?.filter(
+        (booking) => new Date(booking.endTime) > currentTime
+      ) || []
+    );
+  };
+
   return (
-    <div className="max-w-md rounded-lg overflow-hidden shadow-lg p-6 m-4 hover:shadow-2xl transition-shadow duration-300 bg-gray-200">
+    <div className="rounded-lg overflow-hidden shadow-lg p-6 m-4 hover:shadow-2xl transition-shadow duration-300 bg-gray-200">
       <h3 className="font-bold text-xl mb-2">Table no. {table.tableNumber}</h3>
       <p className="text-gray-700 text-base mb-2">Capacity: {table.capacity}</p>
-      {!booked && (
+      {role === "user" && !booked && (
         <div className="mt-4">
           <h5 className="font-bold mb-2">
             Select your preferred date and time:
@@ -111,10 +130,16 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
       {showBookings && (
         <div className="mt-4">
           <h4 className="font-bold mb-2">Booked Slots:</h4>
-          {table.bookings && table.bookings.length > 0 ? (
-            table.bookings.map((booking, index) => (
+          {getFilteredBookings().length > 0 ? (
+            getFilteredBookings().map((booking, index) => (
               <div key={index} className="mt-1 mb-2 p-2 bg-zinc-50 rounded">
                 <p className="text-gray-600">Booking: {index + 1}</p>
+                <p className="text-gray-600">
+                  Username: {booking.username}
+                </p>
+                <p className="text-gray-600">
+                  Email: {booking.email}
+                </p>
                 <p className="text-gray-600">
                   Start: {new Date(booking.startTime).toLocaleString()}
                 </p>

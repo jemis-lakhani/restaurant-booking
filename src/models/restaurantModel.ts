@@ -22,6 +22,14 @@ const RestaurantSchema = new mongoose.Schema({
     ref: "user",
     required: true,
   },
+  openTime: {
+    type: String,
+    required: true,
+  },
+  closeTime: { 
+    type: String, 
+    required: true 
+  },
 });
 
 const Restaurant =

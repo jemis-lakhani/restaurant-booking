@@ -4,8 +4,6 @@ const TableSchema = new mongoose.Schema({
   restaurantId: { type: mongoose.Schema.Types.ObjectId, required: true },
   tableNumber: { type: Number, required: true },
   capacity: { type: Number, required: true },
-  startTime: { type: Date },
-  endTime: { type: Date },
   bookings: [
     {
       startTime: { type: String, required: true },
@@ -15,6 +13,8 @@ const TableSchema = new mongoose.Schema({
         ref: "user",
         required: true,
       },
+      username: { type: String},
+      email: { type: String},
     },
   ],
 });

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -14,7 +14,10 @@ type Restaurant = {
   contactInfo: string;
   description: string;
   ownerId: string;
+  openTime: string;
+  closeTime: string;
 };
+
 type Table = {
   _id: string;
   tableNumber: number;
@@ -62,7 +65,7 @@ const Dashboard: React.FC = () => {
       const response = await axios.get(
         `/api/users/tables?restaurantId=${restaurantId}`
       );
-      setTables(response.data);
+      setTables(response.data.reverse());
     } catch (error: any) {
       console.error("Error fetching tables:", error.message);
       toast.error("Failed to fetch tables");
@@ -101,62 +104,81 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="ml-80">
-        <h1 className="text-2xl font-medium mb-4">
-          Restaurant Owner Dashboard
-        </h1>
+        <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row">
+          <div>
+            <h1 className="text-2xl font-medium mb-4">
+              Restaurant Owner Dashboard
+            </h1>
 
-        {restaurants.length > 0 ? (
-          restaurants.map((restaurant) => (
-            <div key={restaurant._id} className="mb-8">
-              <div className="max-w-fit rounded overflow-hidden shadow-lg m-4 bg-white hover:shadow-2xl transition-shadow duration-300">
-                <div className="relative h-52">
-                  <Image
-                    alt="logo"
-                    src="/Logo.png"
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg"
-                  />
+            {restaurants.length > 0 ? (
+              restaurants.map((restaurant) => (
+                <div key={restaurant._id} className="mb-8">
+                  <div className="max-w-fit rounded overflow-hidden shadow-lg m-4 bg-white hover:shadow-2xl transition-shadow duration-300">
+                    <div className="relative h-52">
+                      <Image
+                        alt="logo"
+                        src="/Logo.png"
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-t-lg"
+                      />
+                    </div>
+                    <div className="px-6 py-4 bg-gray-100">
+                      <h3 className="font-bold text-xl mb-2">
+                        Name: {restaurant.name}
+                      </h3>
+                      <p className="text-gray-700 text-base">
+                        <strong>Restaurant ID:</strong> {restaurant._id}
+                      </p>
+                      <p className="text-gray-700 text-base">
+                        <strong>Owner Id:</strong> {restaurant.ownerId}
+                      </p>
+                      <p className="text-gray-700 text-base">
+                        <strong>Address:</strong> {restaurant.address}
+                      </p>
+                      <p className="text-gray-700 text-base">
+                        <strong>ContactInfo:</strong> {restaurant.contactInfo}
+                      </p>
+                      <p className="text-gray-700 text-base">
+                        <strong>Open Time:</strong> {restaurant.openTime}
+                      </p>
+                      <p className="text-gray-700 text-base">
+                        <strong>Close Time:</strong> {restaurant.closeTime}
+                      </p>
+                      <p className="text-gray-700 text-base">
+                        <strong>Description:</strong> {restaurant.description}
+                      </p>
+                      <button
+                        onClick={() => handleRestaurantClick(restaurant._id)}
+                        className="text-white rounded bg-green-700 mt-2 p-2"
+                      >
+                        {selectedRestaurantId === restaurant._id && showTables
+                          ? "Hide Tables"
+                          : "Manage Tables"}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="px-6 py-4 bg-gray-100">
-                  <h3 className="font-bold text-xl mb-2">
-                    Name: {restaurant.name}
-                  </h3>
-                  <p className="text-gray-700 text-base">
-                    <strong>Restaurant ID:</strong> {restaurant._id}
-                  </p>
-                  <p className="text-gray-700 text-base">
-                    <strong>Owner Id:</strong> {restaurant.ownerId}
-                  </p>
-                  <p className="text-gray-700 text-base">
-                    <strong>Address:</strong> {restaurant.address}
-                  </p>
-                  <p className="text-gray-700 text-base">
-                    <strong>ContactInfo:</strong> {restaurant.contactInfo}
-                  </p>
-                  <p className="text-gray-700 text-base">
-                    <strong>Description:</strong> {restaurant.description}
-                  </p>
-                  <button
-                    onClick={() => handleRestaurantClick(restaurant._id)}
-                    className="text-white rounded bg-green-700 mt-2 p-2"
-                  >
-                    {selectedRestaurantId === restaurant._id && showTables
-                      ? "Hide Tables"
-                      : "Manage Tables"}
-                  </button>
-                </div>
-              </div>
+              ))
+            ) : (
+              <p>No restaurants added yet.</p>
+            )}
+          </div>
+          <div>
+            <div className="mt-12 ml-4">
+              {showTables && selectedRestaurantId && (
+                <ManageTablesForm
+                  restaurantId={selectedRestaurantId}
+                  onTableAdded={() => fetchTables(selectedRestaurantId)}
+                />
+              )}
             </div>
-          ))
-        ) : (
-          <p>No restaurants added yet.</p>
-        )}
-
+          </div>
+        </div>
         {showTables && selectedRestaurantId && (
           <div className="mt-8">
             <h2>Tables for Restaurant ID: {selectedRestaurantId}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-8">
               {tables.length > 0 ? (
                 tables.map((table) => (
                   <div key={table._id}>
@@ -169,15 +191,6 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         )}
-
-        <div className="mt-8 ml-4">
-          {showTables && selectedRestaurantId && (
-            <ManageTablesForm
-              restaurantId={selectedRestaurantId}
-              onTableAdded={() => fetchTables(selectedRestaurantId)}
-            />
-          )}
-        </div>
       </div>
     </div>
   );

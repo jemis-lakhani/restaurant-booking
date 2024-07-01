@@ -9,6 +9,14 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { tableNumber, capacity, startTime, endTime, restaurantId } = reqBody;
 
+    const existingTable = await Table.findOne({ tableNumber, restaurantId });
+    if (existingTable) {
+      return NextResponse.json(
+        { error: "Table number already exists for this restaurant" },
+        { status: 400 }
+      );
+    }
+
     const newTable = new Table({
       tableNumber,
       capacity,

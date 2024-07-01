@@ -9,7 +9,10 @@ type FormValues = {
   address: string;
   contactInfo: string;
   description: string;
+  openTime: string;
+  closeTime: string;
 };
+
 type Restaurant = {
   _id: string;
   name: string;
@@ -17,6 +20,8 @@ type Restaurant = {
   contactInfo: string;
   description: string;
   ownerId: string;
+  openTime: string;
+  closeTime: string;
 };
 
 type AddRestaurantFormProps = {
@@ -42,11 +47,14 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
       setValue("address", restaurant.address);
       setValue("contactInfo", restaurant.contactInfo);
       setValue("description", restaurant.description);
+      setValue("openTime", restaurant.openTime);
+      setValue("closeTime", restaurant.closeTime);
     }
   }, [restaurant, setValue]);
 
   const handleFormSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
+
       let response;
       if (restaurant) {
         response = await axios.put(`/api/users/restaurants`, {
@@ -57,6 +65,9 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
       } else {
         response = await axios.post(`/api/users/restaurants`, data);
         toast.success("Restaurant added successfully");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
       onSubmit(response.data);
       reset();
@@ -67,7 +78,7 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="max-w-md mx-auto bg-white shadow-md rounded px-8 pb-1">
       <h2 className="text-xl font-semibold mb-4">
         {restaurant ? "Update Restaurant" : "Add Restaurant"}
       </h2>
@@ -95,6 +106,24 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
           error={errors.contactInfo?.message}
           register={register("contactInfo", {
             required: "Contact Information is required",
+          })}
+        />
+        <InputField
+          id="openTime"
+          label="Opening Time"
+          placeholder="Enter opening time"
+          error={errors.openTime?.message}
+          register={register("openTime", {
+            required: "Opening Time is required",
+          })}
+        />
+        <InputField
+          id="closeTime"
+          label="Closing Time"
+          placeholder="Enter closing time"
+          error={errors.closeTime?.message}
+          register={register("closeTime", {
+            required: "Closing Time is required",
           })}
         />
         <div>
