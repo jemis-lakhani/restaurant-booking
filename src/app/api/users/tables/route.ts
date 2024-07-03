@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConfig from "@/dbConfig/dbConfig";
 import Table from "@/models/tableModel";
+import Restaurant from "@/models/restaurantModel";
 
 dbConfig();
 
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { tableNumber, capacity, startTime, endTime, restaurantId } = reqBody;
+    const { tableNumber, capacity, restaurantId } = reqBody;
 
     const existingTable = await Table.findOne({ tableNumber, restaurantId });
     if (existingTable) {
@@ -16,12 +17,17 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    const restaurant = await Restaurant.findById(restaurantId);
 
+    if (!restaurant) {
+      return NextResponse.json(
+        { error: "Restaurant not found" },
+        { status: 404 }
+      );
+    }
     const newTable = new Table({
       tableNumber,
       capacity,
-      startTime,
-      endTime,
       restaurantId,
     });
     const savedTable = await newTable.save();
@@ -40,7 +46,15 @@ export async function GET(request: NextRequest) {
     const query = restaurantId ? { restaurantId } : {};
 
     const tables = await Table.find(query);
-    return NextResponse.json(tables, { status: 200 });
+    const populatedTables = await Promise.all(tables.map(async (table) => {
+      const restaurant = await Restaurant.findById(table.restaurantId);
+      return {
+        ...table.toJSON(),
+        restaurantName: restaurant ? restaurant.name : 'Unknown Restaurant',
+        restaurantAddress: restaurant ? restaurant.address : 'Unknown Address'
+      };
+    }));
+    return NextResponse.json(populatedTables, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -49,12 +63,11 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { _id, tableNumber, capacity, startTime, endTime, restaurantId } =
-      reqBody;
+    const { _id, tableNumber, capacity, restaurantId } = reqBody;
 
     const updatedTable = await Table.findByIdAndUpdate(
       _id,
-      { tableNumber, capacity, startTime, endTime, restaurantId },
+      { tableNumber, capacity, restaurantId },
       { new: true }
     );
 
