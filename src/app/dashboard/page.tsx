@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -22,9 +22,9 @@ type Table = {
   _id: string;
   tableNumber: number;
   capacity: number;
+  restaurantId: string;
   startTime: string;
   endTime: string;
-  restaurantId: string;
 };
 
 const Dashboard: React.FC = () => {
@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
         )}
       </div>
 
-      <div className="ml-80">
+      <div className="ml-80 pl-6">
         <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row">
           <div>
             <h1 className="text-2xl font-medium mb-4">

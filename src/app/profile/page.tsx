@@ -102,11 +102,11 @@ const Profile = () => {
                 key={booking.tableId}
                 className="mb-4 p-4 bg-gray-50 shadow-md rounded-lg border-l-4 border-green-500 "
               >
-                 <p className="text-lg font-semibold text-gray-800">
-                  Restaurant: {booking.restaurantName} {/* Display restaurant name */}
+                <p className="text-lg font-semibold text-gray-800">
+                  Restaurant: {booking.restaurantName}
                 </p>
                 <p className="text-gray-600">
-                  Address: {booking.restaurantAddress} {/* Display restaurant address */}
+                  Address: {booking.restaurantAddress}
                 </p>
                 <p className="text-lg font-semibold text-gray-800">
                   Restaurant: {booking.restaurantId}

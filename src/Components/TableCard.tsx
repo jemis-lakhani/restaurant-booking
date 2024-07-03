@@ -7,6 +7,7 @@ type TableProps = {
     _id: string;
     tableNumber: number;
     capacity: number;
+    restaurantId: string;
     bookings?: Booking[];
   };
 };
@@ -26,6 +27,7 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
   const [error, setError] = useState("");
   const [showBookings, setShowBookings] = useState(false);
   const [role, setRole] = useState<string | null>(null);
+  const [restaurant, setRestaurant] = useState({ openTime: "", closeTime: "" });
 
   useEffect(() => {
     const userRole = localStorage.getItem("role");
@@ -57,7 +59,7 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
         endTime,
         username,
         email,
-      }); 
+      });
       toast.success("Table booked successfully");
       setBooked(true);
       setError("");
@@ -66,7 +68,9 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
       }, 1000);
     } catch (error: any) {
       console.error("Error booking table:", error.message);
-      toast.error("The slot is already booked.");
+      const errorMessage =
+        error.response?.data?.error || "booking failed. Please try again.";
+      toast.error(errorMessage);
     }
   };
 
@@ -134,12 +138,8 @@ const TableCard: React.FC<TableProps> = ({ table }) => {
             getFilteredBookings().map((booking, index) => (
               <div key={index} className="mt-1 mb-2 p-2 bg-zinc-50 rounded">
                 <p className="text-gray-600">Booking: {index + 1}</p>
-                <p className="text-gray-600">
-                  Username: {booking.username}
-                </p>
-                <p className="text-gray-600">
-                  Email: {booking.email}
-                </p>
+                <p className="text-gray-600">Username: {booking.username}</p>
+                <p className="text-gray-600">Email: {booking.email}</p>
                 <p className="text-gray-600">
                   Start: {new Date(booking.startTime).toLocaleString()}
                 </p>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -7,10 +7,11 @@ import toast from "react-hot-toast";
 type Table = {
   tableNumber: number;
   capacity: number;
+  restaurantId: string;
   startTime: string;
   endTime: string;
-  restaurantId: string;
 };
+
 type ManageTablesFormProps = {
   restaurantId: string;
   onTableAdded: () => void;
@@ -23,7 +24,6 @@ const ManageTablesForm: React.FC<ManageTablesFormProps> = ({
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm<Table>();
 
@@ -81,34 +81,6 @@ const ManageTablesForm: React.FC<ManageTablesFormProps> = ({
             <p className="text-red-500">Capacity is required</p>
           )}
         </div>
-        {/* <div>
-          <label htmlFor="startTime" className="block text-gray-700 mb-1">
-            Start Time
-          </label>
-          <input
-            type="datetime-local"
-            id="startTime"
-            {...register("startTime", { required: "Start Time is required" })}
-            className="input-field"
-          />
-          {errors.startTime && (
-            <p className="text-red-500">{errors.startTime.message}</p>
-          )}
-        </div>
-        <div>
-          <label htmlFor="endTime" className="block text-gray-700 mb-1">
-            End Time
-          </label>
-          <input
-            type="datetime-local"
-            id="endTime"
-            {...register("endTime", { required: "End Time is required" })}
-            className="input-field"
-          />
-          {errors.endTime && (
-            <p className="text-red-500">{errors.endTime.message}</p>
-          )}
-        </div> */}
         <button
           type="submit"
           className={`bg-blue-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-blue-600 ${

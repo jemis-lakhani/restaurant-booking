@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const TableSchema = new mongoose.Schema({
-  restaurantId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  restaurantId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
   tableNumber: { type: Number, required: true },
   capacity: { type: Number, required: true },
   bookings: [
@@ -13,8 +16,8 @@ const TableSchema = new mongoose.Schema({
         ref: "user",
         required: true,
       },
-      username: { type: String},
-      email: { type: String},
+      username: { type: String },
+      email: { type: String },
     },
   ],
 });

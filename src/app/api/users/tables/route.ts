@@ -46,14 +46,18 @@ export async function GET(request: NextRequest) {
     const query = restaurantId ? { restaurantId } : {};
 
     const tables = await Table.find(query);
-    const populatedTables = await Promise.all(tables.map(async (table) => {
-      const restaurant = await Restaurant.findById(table.restaurantId);
-      return {
-        ...table.toJSON(),
-        restaurantName: restaurant ? restaurant.name : 'Unknown Restaurant',
-        restaurantAddress: restaurant ? restaurant.address : 'Unknown Address'
-      };
-    }));
+    const populatedTables = await Promise.all(
+      tables.map(async (table) => {
+        const restaurant = await Restaurant.findById(table.restaurantId);
+        return {
+          ...table.toJSON(),
+          restaurantName: restaurant ? restaurant.name : "Unknown Restaurant",
+          restaurantAddress: restaurant
+            ? restaurant.address
+            : "Unknown Address",
+        };
+      })
+    );
     return NextResponse.json(populatedTables, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

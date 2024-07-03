@@ -54,7 +54,6 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
 
   const handleFormSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-
       let response;
       if (restaurant) {
         response = await axios.put(`/api/users/restaurants`, {
@@ -108,24 +107,50 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
             required: "Contact Information is required",
           })}
         />
-        <InputField
-          id="openTime"
-          label="Opening Time"
-          placeholder="Enter opening time"
-          error={errors.openTime?.message}
-          register={register("openTime", {
-            required: "Opening Time is required",
-          })}
-        />
-        <InputField
-          id="closeTime"
-          label="Closing Time"
-          placeholder="Enter closing time"
-          error={errors.closeTime?.message}
-          register={register("closeTime", {
-            required: "Closing Time is required",
-          })}
-        />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              htmlFor="openTime"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Opening Time
+            </label>
+            <input
+              type="time"
+              id="openTime"
+              className="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              {...register("openTime", {
+                required: "Opening Time is required",
+              })}
+            />
+            {errors.openTime && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.openTime.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label
+              htmlFor="closeTime"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Closing Time
+            </label>
+            <input
+              type="time"
+              id="closeTime"
+              className="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              {...register("closeTime", {
+                required: "Closing Time is required",
+              })}
+            />
+            {errors.closeTime && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.closeTime.message}
+              </p>
+            )}
+          </div>
+        </div>
         <div>
           <label
             htmlFor="description"
