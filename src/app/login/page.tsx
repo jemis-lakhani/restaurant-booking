@@ -28,9 +28,13 @@ const Login: React.FC = () => {
       const response = await axios.post("/api/users/login", data);
       toast.success("Login Success");
       localStorage.setItem("role", response.data.role);
-      router.push("/");
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     } catch (error: any) {
-      toast.error(error.message);
+      const errorMessage =
+        error.response?.data?.error || "Login failed. Please try again.";
+      toast.error(errorMessage);
     }
   };
 

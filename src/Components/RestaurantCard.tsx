@@ -7,6 +7,8 @@ type Restaurant = {
   address: string;
   contactInfo: string;
   description: string;
+  openTime: string;
+  closeTime: string;
 };
 
 type Props = {
@@ -15,24 +17,33 @@ type Props = {
 
 const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg m-4 bg-white hover:shadow-2xl transition-shadow duration-300">
-      <div className="relative w-full h-48">
-        <Image alt="logo" src="/Logo.png" layout="fill" objectFit="cover" className="rounded-t-lg" />
+    <div className="flex flex-row max-w-full rounded-lg overflow-hidden shadow-lg m-4 bg-white hover:shadow-2xl transition-shadow ">
+      <div className="relative w-1/4 h-48">
+        <Image
+          alt="logo"
+          src="/Logo.png"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-l-lg"
+        />
       </div>
-      <div className="px-6 py-4 bg-green-50">
-        <h3 className="font-bold text-xl mb-2">{restaurant.name}</h3>
-        <p className="text-gray-700 text-base">
+      <div className="w-3/4 px-6 py-4 bg-gradient-to-r from-gray-100 to-gray-200">
+        <h3 className="font-bold text-2xl mb-2 text-gray-900">
+          {restaurant.name}
+        </h3>
+        <p className="text-gray-700 text-lg">
           <strong>Address:</strong> {restaurant.address}
         </p>
-        <p className="text-gray-700 text-base">
+        <p className="text-gray-700 text-lg">
           <strong>Contact:</strong> {restaurant.contactInfo}
         </p>
-        <p className="text-gray-700 text-base mt-2">
-          {restaurant.description}
-        </p>
+        <p className="text-gray-700 text-lg mt-2">{restaurant.description}</p>
       </div>
+      <div className="min-w-fit px-4 pt-14 bg-gradient-to-r bg-gray-200">
+        <p className="text-gray-700 text-lg"> openTime: {restaurant.openTime}</p>
+        <p className="text-gray-700 text-lg">closeTime: {restaurant.closeTime}</p>
+        </div>
     </div>
   );
 };
-
 export default RestaurantCard;

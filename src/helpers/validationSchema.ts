@@ -6,7 +6,12 @@ export const signupSchema = yup.object().shape({
   password: yup
     .string()
     .required("Password is required")
-    .min(1, "Password must be at least 1 characters"),
+    .min(6, "Password must be at least 6 characters")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(
+      /[!@#$%^&*(),.?":{}|<>]/,
+      "Password must contain at least one special character"
+    ),
   role: yup
     .string()
     .oneOf(["user", "restaurantOwner"], "Invalid role")

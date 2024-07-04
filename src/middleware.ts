@@ -20,5 +20,6 @@ export const config = {
     "/signup/:path*",
     "/profile/:path*",
     "/home/:path*",
+    "/dashboard/:path*",
   ],
 };
