@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConfig from "@/dbConfig/dbConfig";
 import Table from "@/models/tableModel";
 import Restaurant from "@/models/restaurantModel";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 dbConfig();
 
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const restaurantId = searchParams.get("restaurantId");
-
+    const { role } = await getDataFromToken(request);
     const query = restaurantId ? { restaurantId } : {};
 
     const tables = await Table.find(query);
@@ -58,6 +59,10 @@ export async function GET(request: NextRequest) {
         };
       })
     );
+    if (role === 'admin') {
+      // Admin-specific logic
+      return NextResponse.json(populatedTables, { status: 200 });
+    }
     return NextResponse.json(populatedTables, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -72,6 +72,8 @@ export async function GET(request: NextRequest) {
     let restaurants;
     if (role === "restaurantOwner") {
       restaurants = await Restaurant.find({ ownerId: userId });
+    }  else if (role === "admin") {
+      restaurants = await Restaurant.find();
     } else {
       restaurants = await Restaurant.find();
     }

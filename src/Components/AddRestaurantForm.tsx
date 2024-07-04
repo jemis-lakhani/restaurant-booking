@@ -158,7 +158,7 @@ const AddRestaurantForm: React.FC<AddRestaurantFormProps> = ({
           >
             Description
           </label>
-          <textarea
+          <input
             id="description"
             {...register("description", {
               required: "Description is required",

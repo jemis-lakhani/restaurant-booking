@@ -37,8 +37,12 @@ const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
         <p className="text-gray-700 text-lg">
           <strong>Contact:</strong> {restaurant.contactInfo}
         </p>
-        <p className="text-gray-700 text-lg mt-2">{restaurant.description} openTime:{restaurant.openTime} closeTime:{restaurant.closeTime}</p>
+        <p className="text-gray-700 text-lg mt-2">{restaurant.description}</p>
       </div>
+      <div className="min-w-fit px-4 pt-14 bg-gradient-to-r bg-gray-200">
+        <p className="text-gray-700 text-lg"> openTime: {restaurant.openTime}</p>
+        <p className="text-gray-700 text-lg">closeTime: {restaurant.closeTime}</p>
+        </div>
     </div>
   );
 };

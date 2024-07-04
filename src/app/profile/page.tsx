@@ -59,6 +59,9 @@ const Profile = () => {
       toast.success("Logged out successfully");
       localStorage.removeItem("role");
       router.push("/login");
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     } catch (error: any) {
       console.error(error.message);
       toast.error(error.message);
@@ -72,7 +75,7 @@ const Profile = () => {
         <div className="p-4 bg-gray-100 rounded-lg mt-4 shadow-md">
           {data ? (
             <>
-              <Link href={`/profile/${data._id}`}>
+              <Link href={`/profile/${data.username}`}>
                 <p className="text-xl font-semibold">
                   Welcome, {data.username}!
                 </p>
@@ -108,12 +111,9 @@ const Profile = () => {
                 <p className="text-gray-600">
                   Address: {booking.restaurantAddress}
                 </p>
-                <p className="text-lg font-semibold text-gray-800">
-                  Restaurant: {booking.restaurantId}
-                </p>
                 <p className="text-gray-600">
-                  Start Time: {new Date(booking.startTime).toLocaleString()} -
-                  End Time: {new Date(booking.endTime).toLocaleString()}
+                  From: {new Date(booking.startTime).toLocaleString()} -
+                  To: {new Date(booking.endTime).toLocaleString()}
                 </p>
               </div>
             ))
@@ -124,7 +124,7 @@ const Profile = () => {
       )}
 
       {role === "admin" && (
-        <div className="mt-4">
+        <div className="mt-4 ml-16">
           <Link href="/admin" className="text-blue-500 underline">
             Go to Admin Dashboard
           </Link>

@@ -91,8 +91,8 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen py-4 mx-4">
-      <div className="fixed left-4">
+    <div className="flex min-h-screen py-4 mx-4 sm:flex-row md:flex-row lg:flex-col">
+      <div className="fixed left-4 sm:flex-row md:flex-row lg:flex-col">
         {restaurants.length > 0 ? (
           <AddRestaurantForm
             restaurant={restaurants[0]}
@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
         )}
       </div>
 
-      <div className="ml-80 pl-6">
+      <div className="ml-80 pl-8">
         <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row">
           <div>
             <h1 className="text-2xl font-medium mb-4">

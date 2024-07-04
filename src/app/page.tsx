@@ -78,6 +78,9 @@ function HomePage() {
       toast.success("logout successfully");
       localStorage.removeItem("role");
       router.push("/login");
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     } catch (error: any) {
       console.error(error.message);
       toast.error(error.message);
